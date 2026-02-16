@@ -21,6 +21,7 @@ return [
 
     // Action
     'add' => 'Add',
+    'duplicate' => 'Duplicate',
     'submit' => 'Submit',
     'update' => 'Update',
     'delete' => 'Delete',

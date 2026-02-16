@@ -50,12 +50,16 @@ class TransactionsController extends Controller
 
     public function create(Request $request)
     {
+        $originalTransaction = null;
+        if ($request->has('original_transaction_id')) {
+            $originalTransaction = Transaction::find($request->get('original_transaction_id'));
+        }
         $partners = $this->getPartnerList()->prepend('-- '.__('transaction.no_partner').' --', 'null');
         $categories = Category::orderBy('name')
             ->where('status_id', Category::STATUS_ACTIVE)
             ->pluck('name', 'id');
 
-        return view('transactions.create', compact('categories', 'partners'));
+        return view('transactions.create', compact('categories', 'partners', 'originalTransaction'));
     }
 
     /**

@@ -3,6 +3,12 @@
 @section('title', __('transaction.list'))
 
 @section('content')
+@php
+    $amount = null;
+    if ($originalTransaction) {
+        $amount = format_number($originalTransaction->amount);
+    }
+@endphp
 <div class="row justify-content-center">
     <div class="col-md-5">
         @can('create', new App\Transaction)
@@ -20,9 +26,19 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">{!! FormField::text('date', ['required' => true, 'label' => __('app.date'), 'value' => old('date', date('Y-m-d')), 'class' => 'date-select']) !!}</div>
-                        <div class="col-md-6">{!! FormField::select('category_id', $categories, ['label' => __('category.category'), 'placeholder' => __('category.uncategorized')]) !!}</div>
+                        <div class="col-md-6">
+                            {!! FormField::select('category_id', $categories, [
+                                'value' => old('category_id', optional($originalTransaction)->category_id),
+                                'label' => __('category.category'),
+                                'placeholder' => __('category.uncategorized'),
+                            ]) !!}
+                        </div>
                     </div>
-                    {!! FormField::textarea('description', ['required' => true, 'label' => __('transaction.description')]) !!}
+                    {!! FormField::textarea('description', [
+                        'required' => true,
+                        'label' => __('transaction.description'),
+                        'value' => old('description', optional($originalTransaction)->description),
+                    ]) !!}
                     <div class="row">
                         <div class="col-md-6">
                             {!! FormField::text('amount', [
@@ -30,9 +46,16 @@
                                 'label' => __('transaction.amount'),
                                 'addon' => ['before' => auth()->user()->currency_code],
                                 'step' => '0.01',
+                                'value' => old('amount', $amount),
                             ]) !!}
                         </div>
-                        <div class="col-md-6">{!! FormField::select('partner_id', $partners, ['label' => __('partner.partner'), 'placeholder' => __('partner.no_partner')]) !!}</div>
+                        <div class="col-md-6">
+                            {!! FormField::select('partner_id', $partners, [
+                                'label' => __('partner.partner'),
+                                'placeholder' => __('partner.no_partner'),
+                                'value' => old('partner_id', optional($originalTransaction)->partner_id),
+                            ]) !!}
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -56,9 +79,19 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">{!! FormField::text('date', ['required' => true, 'label' => __('app.date'), 'value' => old('date', date('Y-m-d')), 'class' => 'date-select']) !!}</div>
-                        <div class="col-md-6">{!! FormField::select('category_id', $categories, ['label' => __('category.category'), 'placeholder' => __('category.uncategorized')]) !!}</div>
+                        <div class="col-md-6">
+                            {!! FormField::select('category_id', $categories, [
+                                'value' => old('category_id', optional($originalTransaction)->category_id),
+                                'label' => __('category.category'),
+                                'placeholder' => __('category.uncategorized'),
+                            ]) !!}
+                        </div>
                     </div>
-                    {!! FormField::textarea('description', ['required' => true, 'label' => __('transaction.description')]) !!}
+                    {!! FormField::textarea('description', [
+                        'required' => true,
+                        'label' => __('transaction.description'),
+                        'value' => old('description', optional($originalTransaction)->description),
+                    ]) !!}
                     <div class="row">
                         <div class="col-md-6">
                             {!! FormField::text('amount', [
@@ -66,9 +99,16 @@
                                 'label' => __('transaction.amount'),
                                 'addon' => ['before' => auth()->user()->currency_code],
                                 'step' => '0.01',
+                                'value' => old('amount', $amount),
                             ]) !!}
                         </div>
-                        <div class="col-md-6">{!! FormField::select('partner_id', $partners, ['label' => __('partner.partner'), 'placeholder' => __('partner.no_partner')]) !!}</div>
+                        <div class="col-md-6">
+                            {!! FormField::select('partner_id', $partners, [
+                                'label' => __('partner.partner'),
+                                'placeholder' => __('partner.no_partner'),
+                                'value' => old('partner_id', optional($originalTransaction)->partner_id),
+                            ]) !!}
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer">

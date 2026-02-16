@@ -4,6 +4,7 @@ namespace Tests\Feature\Transactions;
 
 use App\Category;
 use App\Partner;
+use App\Transaction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -73,5 +74,32 @@ class TransactionEntryTest extends TestCase
             'date' => $date,
             'description' => 'Spending description',
         ]);
+    }
+
+    /** @test */
+    public function user_can_duplicate_a_transaction()
+    {
+        $month = '01';
+        $year = '2017';
+        $date = '2017-01-01';
+        $user = $this->loginAsUser();
+        $transaction = factory(Transaction::class)->create([
+            'amount' => 99.99,
+            'date' => $date,
+            'creator_id' => $user->id,
+        ]);
+
+        $this->visitRoute('transactions.index', ['month' => $month, 'year' => $year]);
+        $this->click('duplicate-transaction-'.$transaction->id);
+        $this->seeRouteIs('transactions.create', [
+            'action' => 'add-spending',
+            'month' => $month,
+            'original_transaction_id' => $transaction->id,
+            'reference_page' => 'transactions',
+            'year' => $year,
+        ]);
+
+        $this->seeElement('input', ['type' => 'text', 'name' => 'amount', 'value' => '99'.config('money.decimal_separator').'99']);
+        $this->seeInElement('textarea#description', $transaction->description);
     }
 }

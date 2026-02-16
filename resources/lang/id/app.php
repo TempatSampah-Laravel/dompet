@@ -21,6 +21,7 @@ return [
 
     // Action
     'add' => 'Tambah',
+    'duplicate' => 'Duplikat',
     'submit' => 'Submit',
     'update' => 'Update',
     'delete' => 'Hapus',
